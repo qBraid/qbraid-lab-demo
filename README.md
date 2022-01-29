@@ -1,1 +1,1 @@
-# Lab-Kernel-Demos
+# qbraid-lab-demo
