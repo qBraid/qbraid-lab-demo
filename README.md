@@ -1,4 +1,5 @@
 # qBraid Lab Demos
+[<img src="https://qbraid-static.s3.amazonaws.com/logos/Launch_on_qBraid_white.png" width="150">](https://account.qbraid.com?gitHubUrl=https://github.com/qBraid/qbraid-lab-demo.git)
 
 qBraid is a cloud-based platform for quantum computing.
 
@@ -11,4 +12,4 @@ For more resources and reference material, see [qBraid Docs](https://qbraid-qbra
 
 Clone this repository to your qBraid account:
 
-[<img src="https://qbraid-static.s3.amazonaws.com/logos/Launch_on_qBraid_white.png" width="150">](https://account.qbraid.com?gitHubUrl=https://github.com/qBraid/qbraid-lab-demo.git)
+
