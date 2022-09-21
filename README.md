@@ -9,7 +9,3 @@ This repository provides demos and tutorials on using the qBraid SDK and the qBr
 
 For more resources and reference material, see [qBraid Docs](https://qbraid-qbraid.readthedocs-hosted.com/en/stable/).
 
-
-Clone this repository to your qBraid account:
-
-
