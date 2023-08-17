@@ -1,0 +1,605 @@
+{
+    "cells": [
+        {
+            "cell_type": "code",
+            "execution_count": 2,
+            "id": "f565f8be-e9a6-4fc2-81ec-958bf61bb182",
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Copyright (C) 2023 qBraid\n",
+                "# Copyright (C) IBM\n",
+                "#\n",
+                "# This file is part of the qBraid-SDK.\n",
+                "#\n",
+                "# The qBraid-SDK is free software released under the GNU General Public License v3\n",
+                "# or later. This specific file, adapted from Qiskit, is dual-licensed under both the\n",
+                "# Apache License, Version 2.0, and the GPL v3. You may not use this file except in\n",
+                "# compliance with the applicable license. You may obtain a copy of the Apache License at\n",
+                "#\n",
+                "# http://www.apache.org/licenses/LICENSE-2.0\n",
+                "#\n",
+                "# This file includes code adapted from Qiskit (https://github.com/Qiskit/qiskit-ibm-provider)\n",
+                "# with modifications by qBraid. The original copyright notice is included above.\n",
+                "# THERE IS NO WARRANTY for the qBraid-SDK, as per Section 15 of the GPL v3.",
+            ],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "b07834ff-27d3-4f84-8d41-2653f554a92f",
+            "metadata": {},
+            "source": [
+                "# qBraid-SDK Braket on IonQ device Tutorial: Quantum Teleportation "
+            ],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "c63b76c0-03c0-468a-b446-883c74ae602a",
+            "metadata": {},
+            "source": [
+                "Per usual, install the qBraid SDK environment on Lab, and use the qBraid CLI to enable [Quantum Jobs](https://docs.qbraid.com/en/latest/lab/quantumjobs.html):"
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 3,
+            "id": "e2ed181d-fd24-4e77-bf68-8e82eb4b6e1f",
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "\u001b[0;35mYou have already enabled qBraid Quantum Jobs in the qbraid_sdk environment.\u001b[0m\n"
+                    ],
+                }
+            ],
+            "source": ["!qbraid jobs enable qbraid_sdk"],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "eec54c24-6ac4-4d04-9ef6-1a75440d336c",
+            "metadata": {},
+            "source": [
+                "You can check that the `jobs` keyword next to the qBraid SDK environment is now green."
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 4,
+            "id": "5f35b403-6b7d-4b12-92ab-0a94df2658dc",
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "# installed environments:\n",
+                        "#\n",
+                        "default                  \u001b[0;31mjobs\u001b[0m  /opt/.qbraid/environments/qbraid_000000\n",
+                        "aws_braket               \u001b[0;32mjobs\u001b[0m  /home/jovyan/.qbraid/environments/aws_braket_kwx6dl\n",
+                        "qbraid_sdk               \u001b[0;32mjobs\u001b[0m  /home/jovyan/.qbraid/environments/qbraid_sdk_9j9sjy\n",
+                        "\n",
+                    ],
+                }
+            ],
+            "source": ["!qbraid envs list"],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "d3b024e5-0cba-45d8-ab2e-e5ca2e7575a9",
+            "metadata": {},
+            "source": [
+                "It's important to import the qBraid SDK only *after* you have enabled quantum jobs."
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 5,
+            "id": "cb0f44a1-5852-4c81-b930-85b2ea40cda4",
+            "metadata": {},
+            "outputs": [
+                {
+                    "data": {"text/plain": ["'0.4.4.dev20230816194153'"]},
+                    "execution_count": 5,
+                    "metadata": {},
+                    "output_type": "execute_result",
+                }
+            ],
+            "source": ["import qbraid\n", "\n", "qbraid.__version__"],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "86b99f2b-49fb-4f53-a794-d964ba997a2c",
+            "metadata": {},
+            "source": ["# Creating the Circuit"],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 6,
+            "id": "6884eb6c-8e0f-466f-b220-828d7998d508",
+            "metadata": {},
+            "outputs": [],
+            "source": ["from qiskit import QuantumCircuit"],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "fc1be341-7e17-4ac7-b5f2-06951f2a3e34",
+            "metadata": {},
+            "source": [
+                "The code for this circuit was taken from IBMs Quantum Teleportation tutorial. Check out their [tutorial](https://www.youtube.com/watch?v=mMwovHK2NrE&t) for a more in depth explanation. The idea is that we want to transport a qubit state from one person (Alice) to another (Bob). We utlizie an entangled Bell state to do so."
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 7,
+            "id": "b16d8330-66c2-4bbf-bf6a-799a55e8e3ac",
+            "metadata": {},
+            "outputs": [
+                {
+                    "data": {
+                        "text/plain": [
+                            "<qiskit.circuit.instructionset.InstructionSet at 0x7f2ea8550580>"
+                        ]
+                    },
+                    "execution_count": 7,
+                    "metadata": {},
+                    "output_type": "execute_result",
+                }
+            ],
+            "source": [
+                "circuit = QuantumCircuit(3,3)\n",
+                "\n",
+                "circuit.x(0)\n",
+                "\n",
+                "#Controlled Hadamard gates are not part of the quantum gates supported by the Harmony device\n",
+                "circuit.ch(0, 1)\n",
+                "circuit.ch(0, 1)\n",
+                "#----\n",
+                "\n",
+                "circuit.barrier()\n",
+                "circuit.h(1)\n",
+                "circuit.cx(1,2)\n",
+                "\n",
+                "circuit.barrier() \n",
+                "\n",
+                "\n",
+                "circuit.cx(0,1)\n",
+                "circuit.h(0)\n",
+                "\n",
+                "circuit.barrier() \n",
+                "\n",
+                "\n",
+                "circuit.measure([0, 1], [0, 1]) \n",
+                "circuit.barrier() \n",
+                "\n",
+                "circuit.cx(1, 2)\n",
+                "circuit.cz(0, 2)\n",
+                "\n",
+                "circuit.measure([2], [2])",
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 8,
+            "id": "5662eb64-3296-4413-9418-754955f8a9ac",
+            "metadata": {},
+            "outputs": [
+                {
+                    "data": {
+                        "image/png": "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",
+                        "text/plain": ["<Figure size 1458.05x367.889 with 1 Axes>"],
+                    },
+                    "execution_count": 8,
+                    "metadata": {},
+                    "output_type": "execute_result",
+                }
+            ],
+            "source": ["%matplotlib inline\n", "circuit.draw(output='mpl')"],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "c58aab66-29e3-4997-96da-458e51149f0d",
+            "metadata": {},
+            "source": [
+                "Notice that we've added two controlled-Hadamard gates: applying two controlled-Hadamards back to back is equivalent to the identity gate. Theoretically, this is the same circuit, however controlled-Hadamard gates are not supported on the IonQ computer. We will see how we can leverage qBraid's capabilities to still run this circuit on IonQ's computer."
+            ],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "a9cdeff3-809b-41e2-8ab3-a8b4b9343d22",
+            "metadata": {},
+            "source": ["We can observe the supported gate set with the following:"],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 9,
+            "id": "8c816874-99ba-4788-a115-35e13528025d",
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "Quantum Gates supported by Harmony:\n",
+                        " ['x', 'y', 'z', 'rx', 'ry', 'rz', 'h', 'cnot', 's', 'si', 't', 'ti', 'v', 'vi', 'xx', 'yy', 'zz', 'swap']\n",
+                    ],
+                }
+            ],
+            "source": [
+                "from braket.aws import AwsDevice\n",
+                "\n",
+                'device = AwsDevice("arn:aws:braket:us-east-1::device/qpu/ionq/Harmony")\n',
+                "\n",
+                "# get device name\n",
+                "device_name = device.name\n",
+                "# show supportedQuantumOperations (supported gates for a device)\n",
+                "device_operations = device.properties.dict()['action']['braket.ir.openqasm.program']['supportedOperations']\n",
+                "print('Quantum Gates supported by {}:\\n {}'.format(device_name, device_operations))",
+            ],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "6088ee7e-07cd-4377-8036-5fcaee685592",
+            "metadata": {},
+            "source": [
+                "We initially programmed this circuit in qiskit, but we want to test braket circuit capabilties on the IonQ computer. Thus, we can use qBraid's circuit wrapper to convert the circuit to braket:"
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 10,
+            "id": "08db9529-4401-403c-9e4f-097842325939",
+            "metadata": {},
+            "outputs": [],
+            "source": ["from qbraid import circuit_wrapper"],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 11,
+            "id": "14236621-3cc1-47ef-aec4-6961a6fa8c66",
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "<class 'braket.circuits.circuit.Circuit'>\n",
+                        "T  : |0|1|2|3|4|5|6|7|\n",
+                        "                      \n",
+                        "q0 : -X-C-C-----C-H-C-\n",
+                        "        | |     |   | \n",
+                        "q1 : ---H-H-H-C-X-C-|-\n",
+                        "              |   | | \n",
+                        "q2 : ---------X---X-Z-\n",
+                        "\n",
+                        "T  : |0|1|2|3|4|5|6|7|\n",
+                    ],
+                }
+            ],
+            "source": [
+                "wrapped_circuit = circuit_wrapper(circuit)\n",
+                'braket_circuit = wrapped_circuit.transpile("braket")\n',
+                "print(type(braket_circuit))\n",
+                "print(braket_circuit)",
+            ],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "da695df1-b5ea-4252-b0fc-041018d3d652",
+            "metadata": {},
+            "source": ["# Attemping to Run the Circuit without qBraid"],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 12,
+            "id": "54aa2d88-bdd4-4a10-99e1-97c628e7cdb6",
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": ["Unsupported gates, circuit cannot be run!\n"],
+                }
+            ],
+            "source": [
+                'device = AwsDevice("arn:aws:braket:us-east-1::device/qpu/ionq/Harmony")\n',
+                "try:\n",
+                "    job = device.run(braket_circuit, shots=10)\n",
+                "except:\n",
+                '    print("Unsupported gates, circuit cannot be run!")',
+            ],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "f67a7473-b60a-4818-b534-a0c076dd6cc4",
+            "metadata": {},
+            "source": ["## Running on an IonQ Device via qBraid"],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "60c4168c-5e97-417a-9466-7156d48cd76d",
+            "metadata": {},
+            "source": [
+                "Let's check which devices (specifically IonQ ones) are online, and also find their device IDs:"
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 13,
+            "id": "f77c89e4-1a66-4e1f-94f4-a89565513ba7",
+            "metadata": {},
+            "outputs": [],
+            "source": ["from qbraid import get_devices"],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 14,
+            "id": "c9b12da2-fe9e-4c03-b48d-a6ab0ec2bc44",
+            "metadata": {},
+            "outputs": [
+                {
+                    "data": {
+                        "text/html": [
+                            "<h3>Supported Devices</h3><table><tr>\n",
+                            "    <th style='text-align:left'>Provider</th>\n",
+                            "    <th style='text-align:left'>Name</th>\n",
+                            "    <th style='text-align:left'>qBraid ID</th>\n",
+                            "    <th style='text-align:left'>Status</th></tr>\n",
+                            "    <tr>\n",
+                            "        <td style='text-align:left'>IonQ</td>\n",
+                            "        <td style='text-align:left'>Aria-1</td>\n",
+                            "        <td style='text-align:left'><code>aws_ionq_aria1</code></td>\n",
+                            "        <td><span style='color:red'>○</span></td></tr>\n",
+                            "        <tr>\n",
+                            "        <td style='text-align:left'>IonQ</td>\n",
+                            "        <td style='text-align:left'>Harmony</td>\n",
+                            "        <td style='text-align:left'><code>aws_ionq_harmony</code></td>\n",
+                            "        <td><span style='color:red'>○</span></td></tr>\n",
+                            "        <tr><td colspan='4'; style='text-align:right'>Device status updated 0 minutes ago</td></tr></table>",
+                        ],
+                        "text/plain": ["<IPython.core.display.HTML object>"],
+                    },
+                    "metadata": {},
+                    "output_type": "display_data",
+                }
+            ],
+            "source": ['get_devices(filters={"provider": "IonQ"})'],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "79586114-de39-4c10-aa42-58cdcb5645bd",
+            "metadata": {},
+            "source": ["Let's check how many credits we have left:"],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 15,
+            "id": "056a8e55-717d-4be0-8f53-ade9b0601c44",
+            "metadata": {},
+            "outputs": [
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": [
+                        "\u001b[0;35mYou have \u001b[0m1000.00\u001b[0;35m remaining qBraid credits.\u001b[0m\n"
+                    ],
+                }
+            ],
+            "source": ["!qbraid jobs get-credits"],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "f45049f2-ed77-4b89-8602-f4f719269ad8",
+            "metadata": {},
+            "source": [
+                "In this tutorial we'll use IonQ's Harmony computer. Now we can use qBraid's [device wrapper](https://docs.qbraid.com/en/latest/sdk/devices.html#device-wrapper) to run a job on an IonQ device. The device wrapper adds a layer of abstraction, allowing us to run a braket circuit on an IonQ quantum computer. "
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 16,
+            "id": "6206cd7e-7d83-43fd-b343-46e9e55737a3",
+            "metadata": {},
+            "outputs": [],
+            "source": ["from qbraid import device_wrapper"],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 17,
+            "id": "91751155-9197-4d26-88ba-7a7779e0a084",
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                'ionq_device_id = "aws_ionq_harmony" #aws_ionq_harmony is the qBraid ID for the Harmony Computer \n',
+                "device = device_wrapper(ionq_device_id) ",
+            ],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "680db65d-fba6-4e69-b298-bc1888ae451e",
+            "metadata": {},
+            "source": [
+                "Feel free to change the number of shots to reduce the number of qBraid credits:"
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 18,
+            "id": "d407a1e1-32da-4cf9-848e-35d3886c2470",
+            "metadata": {},
+            "outputs": [
+                {
+                    "data": {"text/plain": ["<JobStatus.QUEUED: 'job is queued'>"]},
+                    "execution_count": 18,
+                    "metadata": {},
+                    "output_type": "execute_result",
+                }
+            ],
+            "source": [
+                "job = device.run(braket_circuit, shots=50)\n",
+                "job.status() #checking the status of our job",
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 20,
+            "id": "85effdf7-bee4-42a9-b29e-4a2513f10866",
+            "metadata": {},
+            "outputs": [],
+            "source": ["from qbraid import get_jobs, job_wrapper"],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 21,
+            "id": "e16619e5-d780-476a-a5bd-66df76e8c073",
+            "metadata": {},
+            "outputs": [
+                {
+                    "data": {
+                        "text/html": [
+                            "<h3>Quantum Jobs</h3><table><tr>\n",
+                            "    <th style='text-align:left'>qBraid ID</th>\n",
+                            "    <th style='text-align:left'>Submitted</th>\n",
+                            "    <th style='text-align:left'>Status</th></tr>\n",
+                            "    <tr>\n",
+                            "        <td style='text-align:left'>aws_ionq_harmony-pak225-qjob-o2jap9csrr7kldwfsswn</td>\n",
+                            "        <td style='text-align:left'>2023-08-17T07:00:49.884Z</td>\n",
+                            "        <td style='text-align:left'><span style='color:blue'>QUEUED</span></td></tr>\n",
+                            "        <tr>\n",
+                            "        <td style='text-align:left'>ibm_q_lima-pak225-qjob-brs3h5n60mwbt65q5mkv</td>\n",
+                            "        <td style='text-align:left'>2023-08-17T06:55:16.950Z</td>\n",
+                            "        <td style='text-align:left'><span style='color:blue'>QUEUED</span></td></tr>\n",
+                            "        <tr>\n",
+                            "        <td style='text-align:left'>ibm_q_lima-pak225-qjob-bxfu142k4ad7s2ve37mx</td>\n",
+                            "        <td style='text-align:left'>2023-08-16T23:28:11.794Z</td>\n",
+                            "        <td style='text-align:left'><span style='color:green'>COMPLETED</span></td></tr>\n",
+                            "        <tr>\n",
+                            "        <td style='text-align:left'>aws_ionq_harmony-pak225-qjob-91vedne55b87zssd1qvk</td>\n",
+                            "        <td style='text-align:left'>2023-08-16T23:24:24.657Z</td>\n",
+                            "        <td style='text-align:left'><span style='color:blue'>QUEUED</span></td></tr>\n",
+                            "        <tr>\n",
+                            "        <td style='text-align:left'>aws_sv_sim-pak225-qjob-xb5tp2utfnkmlelq6pjw</td>\n",
+                            "        <td style='text-align:left'>2023-08-16T23:22:25.464Z</td>\n",
+                            "        <td style='text-align:left'><span style='color:green'>COMPLETED</span></td></tr>\n",
+                            "        <tr>\n",
+                            "        <td style='text-align:left'>aws_sv_sim-pak225-qjob-sup7vf4xfdis54jfpaap</td>\n",
+                            "        <td style='text-align:left'>2023-08-16T22:13:10.976Z</td>\n",
+                            "        <td style='text-align:left'><span style='color:green'>COMPLETED</span></td></tr>\n",
+                            "        <tr>\n",
+                            "        <td style='text-align:left'>aws_sv_sim-pak225-qjob-vmf97vqkllxkwftoyksi</td>\n",
+                            "        <td style='text-align:left'>2023-08-16T21:53:53.876Z</td>\n",
+                            "        <td style='text-align:left'><span style='color:green'>COMPLETED</span></td></tr>\n",
+                            "        <tr>\n",
+                            "        <td style='text-align:left'>aws_sv_sim-pak225-qjob-jviqbvtu4fod1765bu7p</td>\n",
+                            "        <td style='text-align:left'>2023-08-16T21:49:40.008Z</td>\n",
+                            "        <td style='text-align:left'><span style='color:green'>COMPLETED</span></td></tr>\n",
+                            "        <tr>\n",
+                            "        <td style='text-align:left'>aws_ionq_harmony-pak225-qjob-d1a6fq734y99wbseucob</td>\n",
+                            "        <td style='text-align:left'>2023-08-15T07:20:06.653Z</td>\n",
+                            "        <td style='text-align:left'><span style='color:green'>COMPLETED</span></td></tr>\n",
+                            "        <tr>\n",
+                            "        <td style='text-align:left'>aws_ionq_harmony-pak225-qjob-r8zj59u11rj5bdrnei08</td>\n",
+                            "        <td style='text-align:left'>2023-08-09T03:04:40.100Z</td>\n",
+                            "        <td style='text-align:left'><span style='color:green'>COMPLETED</span></td></tr>\n",
+                            "        <tr><td colspan='4'; style='text-align:right'>Displaying 10 most recent jobs</td></tr></table>",
+                        ],
+                        "text/plain": ["<IPython.core.display.HTML object>"],
+                    },
+                    "metadata": {},
+                    "output_type": "display_data",
+                }
+            ],
+            "source": ["get_jobs()"],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 22,
+            "id": "4734efd6-46b6-49b3-af12-d5f9a6844655",
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "job = job_wrapper('aws_ionq_harmony-pak225-qjob-91vedne55b87zssd1qvk')"
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "id": "62bda1e9-ff71-4c19-8072-a43a77906a4a",
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "result = job.result()\n",
+                "counts = result.measurement_counts()\n",
+                "print(counts)",
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "id": "3b3f7529-f37d-4346-8ad4-869cbe4e664a",
+            "metadata": {},
+            "outputs": [],
+            "source": ["result.plot_counts()"],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "c4bc13a0-f7dd-40ae-a5a3-9d42d4507443",
+            "metadata": {},
+            "source": [
+                "We see that we've correctly teleported the state, since c2 (the leading qubit) is far more likely to be 1, and we teleported the |1> state! Note that for this tutorial we only run 50 shots (and thus observe messy data) due to our credit limit."
+            ],
+        },
+        {
+            "cell_type": "markdown",
+            "id": "25882feb-924c-4fa4-bb8a-7b65001cd63d",
+            "metadata": {},
+            "source": [
+                "We can also run our circuit on a simulator to get cleaner results:"
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "id": "e535ad1b-3254-4432-89a3-96959f924998",
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                'aws_device_id = "aws_sv_sim" #aws_sv_sim is the qBraid id for the SV1 Computer \n',
+                "device = device_wrapper(aws_device_id) \n",
+                "sim_job = device.run(qiskit_circuit, shots=1000)\n",
+                "sim_job.status() #checking the status of our job\n",
+                "result_sim = sim_job.result()\n",
+                "counts_sim = result.measurement_counts()\n",
+                "\n",
+                "result_sim.plot_counts()",
+            ],
+        },
+        {
+            "cell_type": "code",
+            "execution_count": null,
+            "id": "16d17131-3807-4502-bc46-01277339d226",
+            "metadata": {},
+            "outputs": [],
+            "source": [],
+        },
+    ],
+    "metadata": {
+        "kernelspec": {
+            "display_name": "Python 3 [qBraid]",
+            "language": "python",
+            "name": "python3_qbraid_sdk_9j9sjy",
+        },
+        "language_info": {
+            "codemirror_mode": {"name": "ipython", "version": 3},
+            "file_extension": ".py",
+            "mimetype": "text/x-python",
+            "name": "python",
+            "nbconvert_exporter": "python",
+            "pygments_lexer": "ipython3",
+            "version": "3.9.12",
+        },
+    },
+    "nbformat": 4,
+    "nbformat_minor": 5,
+}
