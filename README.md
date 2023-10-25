@@ -3,7 +3,6 @@
 
 qBraid is a cloud-based platform for quantum computing.
 
-This repository provides demos and tutorials on using the [qBraid SDK](https://github.com/qBraid/qBraid), [qBraid CLI](https://docs.qbraid.com/en/latest/cli/qbraid.html), and qBraid Lab features including [Quantum Jobs](https://docs.qbraid.com/en/latest/lab/quantum_jobs.html), and [GPUs](https://docs.qbraid.com/en/latest/lab/gpu.html).
+This repository provides demos and tutorials on using the [qBraid SDK](https://github.com/qBraid/qBraid), [qBraid CLI](https://docs.qbraid.com/projects/cli/en/latest/cli/qbraid.html), and qBraid Lab features including [Quantum Jobs](https://docs.qbraid.com/projects/lab/en/latest/lab/quantum_jobs.html), and [GPUs](https://docs.qbraid.com/projects/lab/en/latest/lab/gpu.html).
 
 For more resources and reference material, see [qBraid Docs](https://docs.qbraid.com/en/latest/).
-
