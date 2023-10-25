@@ -1,29 +1,26 @@
 import string
 import time
-from typing import List, Optional, Tuple
 from collections import OrderedDict
+from typing import List, Optional, Tuple
 
-
-from gymnasium import Env
-from gymnasium.spaces import Discrete, Box
 import numpy as np
-from qiskit.circuit.random import random_circuit
-from qiskit.circuit.library import standard_gates, iSwapGate
-from qiskit.converters import circuit_to_dag
+import torch
+from gymnasium import Env
+from gymnasium.spaces import Box, Discrete
 from qiskit import QuantumCircuit
-from qiskit.transpiler.passes import (
-    CommutativeCancellation,
-    CXCancellation,
-    Optimize1qGatesDecomposition,
-    Collect2qBlocks,
-    # Unroller,
-    UnitarySynthesis,
-    CommutativeInverseCancellation,
-)
+from qiskit.circuit.library import iSwapGate, standard_gates
+from qiskit.circuit.random import random_circuit
+from qiskit.converters import circuit_to_dag
 from qiskit.quantum_info import Statevector
 from qiskit.transpiler import PassManager
+from qiskit.transpiler.passes import CommutativeCancellation  # Unroller,
+from qiskit.transpiler.passes import (
+    CommutativeInverseCancellation,
+    CXCancellation,
+    Optimize1qGatesDecomposition,
+    UnitarySynthesis,
+)
 from qiskit.visualization import dag_drawer
-import torch
 from torch.utils.tensorboard import SummaryWriter
 
 
@@ -81,9 +78,7 @@ class QuantumEnv(Env):
         self.circuit_score_array = []
         self.render_true = render
 
-    def create_random_circuit(
-        self, seed: Optional[int] = None
-    ) -> QuantumCircuit:
+    def create_random_circuit(self, seed: Optional[int] = None) -> QuantumCircuit:
         """Creates a random circuit
 
         Args:
