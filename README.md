@@ -1,8 +1,29 @@
-# qBraid Lab Demos
+
+# qBraid Demos and Tutorials
+
+Welcome to the **qBraid Demos Repository**! This repository contains a collection of Jupyter Notebooks showcasing how to use **qBraid's open-source SDKs** for quantum computing. It includes hands-on examples that demonstrate the integration of various tools with **qBraid-Lab**, making it easier to run quantum computing experiments seamlessly in the cloud.
+
 [<img src="https://qbraid-static.s3.amazonaws.com/logos/Launch_on_qBraid_white.png" width="150">](https://account.qbraid.com?gitHubUrl=https://github.com/qBraid/qbraid-lab-demo.git)
 
-qBraid is a cloud-based platform for quantum computing.
+## Contents
 
-This repository provides demos and tutorials on using the [qBraid SDK](https://github.com/qBraid/qBraid), [qBraid CLI](https://docs.qbraid.com/projects/cli/en/latest/cli/qbraid.html), and qBraid Lab features including [Quantum Jobs](https://docs.qbraid.com/projects/lab/en/latest/lab/quantum_jobs.html), and [GPUs](https://docs.qbraid.com/projects/lab/en/latest/lab/gpu.html).
+This repository features tutorials and examples for the following:
 
-For more resources and reference material, see [qBraid Docs](https://docs.qbraid.com/en/latest/).
+- [**qBraid-SDK**](https://docs.qbraid.com/sdk/): Learn how to interact with quantum devices using the qBraid Runtime framework.
+- [**qBraid-QIR**](https://docs.qbraid.com/qir/): Explore qBraid's Quantum Intermediate Representation (QIR) interface using familiar frameworks like OpenQASM 3 and Cirq.
+- [**qBraid-CLI**](https://docs.qbraid.com/cli/): Understand how to manage quantum jobs and resources using qBraid's Command Line Interface.
+- [**qBraid-Lab**](https://docs.qbraid.com/lab/) Integration:
+  - [**Quantum Jobs**](https://docs.qbraid.com/lab/user-guide/quantum-jobs): Submit and manage quantum jobs in qBraid Lab.
+  - [**GPUs**](https://docs.qbraid.com/lab/user-guide/gpus): Learn how to accelerate your quantum simulations using GPUs available through qBraid Lab.
+
+## Documentation and Resources
+
+For more information on qBraid and its tools, check out:
+
+- **qBraid Platform Documentation**: Comprehensive user guides and resources at [docs.qbraid.com](https://docs.qbraid.com/).
+- **qBraid Software API Reference**: Detailed API documentation for the qBraid-SDK at [sdk.qbraid.com](https://sdk.qbraid.com/).
+- **qBraid GitHub Community**: Join the discussion and contribute at [GitHub Community Page](https://github.com/qBraid/community).
+
+## Contribution
+
+Contributions to this repository are welcome! If you encounter any issues or would like to contribute improvements or new examples, please open an issue or submit a pull request.

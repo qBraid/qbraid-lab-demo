@@ -23,4 +23,4 @@ jobs:
         pip install "black[jupyter]"
     - name: Check formating with black
       run: |
-        black algorithms qbraid_lab qbraid_sdk --check
+        black algorithms qbraid_lab qbraid_sdk qbraid_qir --check
