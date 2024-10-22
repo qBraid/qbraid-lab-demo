@@ -89,8 +89,12 @@ class QuantumEnv(Env):
         """
         if seed is not None:
             np.random.seed(seed)
-        qc_1 = random_circuit(self.num_qubits, np.random.randint(self.min_depth, self.max_depth))
-        qc_2 = random_circuit(self.num_qubits, np.random.randint(self.min_depth, self.max_depth))
+        qc_1 = random_circuit(
+            self.num_qubits, np.random.randint(self.min_depth, self.max_depth)
+        )
+        qc_2 = random_circuit(
+            self.num_qubits, np.random.randint(self.min_depth, self.max_depth)
+        )
 
         qc_1.compose(qc_2, inplace=True)
 
@@ -117,7 +121,9 @@ class QuantumEnv(Env):
         """
 
         # The tensor is of shape (num_qubits, num_gates, num_params)
-        circuit_tensor = torch.zeros((circuit.num_qubits, len(self.qiskit_gates), self.num_actions))
+        circuit_tensor = torch.zeros(
+            (circuit.num_qubits, len(self.qiskit_gates), self.num_actions)
+        )
 
         for _, op in enumerate(circuit):
             name = op.operation.name
@@ -136,7 +142,9 @@ class QuantumEnv(Env):
     def get_qiskit_gates(self, seed: Optional[int] = None):
         """Returns a dictionary of all qiskit gates with random parameters"""
         qiskit_gates = {
-            attr: None for attr in dir(standard_gates) if attr[0] in string.ascii_uppercase
+            attr: None
+            for attr in dir(standard_gates)
+            if attr[0] in string.ascii_uppercase
         }
 
         # Add random parameters to gates for circuit generation
@@ -148,7 +156,9 @@ class QuantumEnv(Env):
             ]
             params = self._generate_params(varnames, seed=seed)
             qiskit_gates[gate] = getattr(standard_gates, gate)(**params)
-        qiskit_gates = OrderedDict({v.name: v for _, v in qiskit_gates.items() if v is not None})
+        qiskit_gates = OrderedDict(
+            {v.name: v for _, v in qiskit_gates.items() if v is not None}
+        )
         # Add iSwap gate
         qiskit_gates["iswap"] = iSwapGate()
         return qiskit_gates
