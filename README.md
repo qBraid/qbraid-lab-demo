@@ -13,7 +13,6 @@ This repository features tutorials and examples for the following:
 - [**qBraid-QIR**](https://docs.qbraid.com/qir/): Explore qBraid's Quantum Intermediate Representation (QIR) interface using familiar frameworks like OpenQASM 3 and Cirq.
 - [**PyQASM**](https://docs.qbraid.com/pyqasm/): Discover new ways to integrate with OpenQASM, featuring methods for program validation, compilation, inlining, and unrolling.
 - [**qBraid-CLI**](https://docs.qbraid.com/cli/): Understand how to manage quantum jobs and resources using qBraid's Command Line Interface.
-
 - [**qBraid-Lab**](https://docs.qbraid.com/lab/) Integration:
   - [**Quantum Jobs**](https://docs.qbraid.com/lab/user-guide/quantum-jobs): Learn how to submit and manage quantum jobs in qBraid Lab.
   - [**GPUs**](https://docs.qbraid.com/lab/user-guide/gpus): Learn how to accelerate your quantum simulations using GPUs available through qBraid Lab.
