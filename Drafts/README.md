@@ -6,3 +6,4 @@
 4. Rigetti via Azure
 5. Need to re-add Q-CTRL
 6. Need to re-add Azure basics 
+7. Should verify IBM-Jobs against latest Qiskit version
