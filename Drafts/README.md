@@ -7,5 +7,5 @@
 5. PyQIR to Squin Conversion
 6. Need to re-add Q-CTRL
 7. Need to re-add Azure basics
-8. Should verify IBM-Jobs against latest Qiskit version
+8. IBM Jobs - verify against latest Qiskit version
 9. Autoqasm POC fails
