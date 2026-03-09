@@ -4,6 +4,8 @@
 2. GPUs on Lab example Cirq
 3. IonQ Native Gates
 4. Rigetti via Azure
-5. Need to re-add Q-CTRL
-6. Need to re-add Azure basics 
-7. Should verify IBM-Jobs against latest Qiskit version
+5. PyQIR to Squin Conversion
+6. Need to re-add Q-CTRL
+7. Need to re-add Azure basics
+8. Should verify IBM-Jobs against latest Qiskit version
+9. Autoqasm POC fails
