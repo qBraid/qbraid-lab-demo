@@ -7,19 +7,19 @@ Welcome to the qBraid Demos Repository! This repository contains a collection of
 
 This repository features tutorials and examples for the following:
 
-- [**qBraid-SDK**](https://docs.qbraid.com/sdk/): Transpile circuits across frameworks, interact with quantum devices, and visualize results using the qBraid Runtime.
-- [**qBraid-Algorithms**](https://docs.qbraid.com/algorithms/): Run quantum algorithms (QPE, QFT, Bernstein-Vazirani) using qBraid's algorithms library and OpenQASM 3.
-- [**qBraid-QIR**](https://docs.qbraid.com/qir/): Convert quantum programs to Quantum Intermediate Representation (QIR) using OpenQASM 3, Cirq, and AutoQASM.
-- [**qBraid-Runtime**](https://docs.qbraid.com/sdk/user-guide/runtime/): Submit jobs to real quantum hardware and simulators via AWS, IQM, QuEra, Pasqal, and more.
-- [**PyQASM**](https://docs.qbraid.com/pyqasm/): Validate, compile, inline, and unroll OpenQASM 3 programs.
-- [**Provider-Jobs**](https://docs.qbraid.com/sdk/user-guide/providers/): Examples for third-party providers requiring external credentials — IBM Quantum and IonQ.
+- [**qBraid-SDK**](https://docs.qbraid.com/v2/sdk/): Transpile circuits across frameworks, interact with quantum devices, and visualize results using the qBraid Runtime.
+- [**qBraid-Algorithms**](https://docs.qbraid.com/v2/algorithms/): Run quantum algorithms (QPE, QFT, Bernstein-Vazirani) using qBraid's algorithms library and OpenQASM 3.
+- [**qBraid-QIR**](https://docs.qbraid.com/v2/qir/): Convert quantum programs to Quantum Intermediate Representation (QIR) using OpenQASM 3, Cirq, and AutoQASM.
+- [**qBraid-Runtime**](https://docs.qbraid.com/v2/sdk/user-guide/runtime/): Submit jobs to real quantum hardware and simulators via AWS, IQM, QuEra, Pasqal, and more.
+- [**PyQASM**](https://docs.qbraid.com/v2/pyqasm/): Validate, compile, inline, and unroll OpenQASM 3 programs.
+- [**Provider-Jobs**](https://docs.qbraid.com/v2/sdk/user-guide/providers/): Examples for third-party providers requiring external credentials — IBM Quantum and IonQ.
 
 ## Documentation and Resources
 
 For more information on qBraid and its tools, check out:
 
 - **qBraid Platform Documentation**: Comprehensive user guides and resources at [docs.qbraid.com](https://docs.qbraid.com/).
-- **qBraid Software API Reference**: Detailed API documentation for the qBraid-SDK at [sdk.qbraid.com](https://sdk.qbraid.com/).
+- **qBraid Software API Reference**: Detailed API documentation for the qBraid-SDK at [sdk.qbraid.com](https://docs.qbraid.com/v2/sdk/user-guide/overview).
 - **qBraid GitHub Community**: Join the discussion and contribute at [GitHub Community Page](https://github.com/qBraid/community).
 
 ## Contribution
