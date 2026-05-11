@@ -1,0 +1,6 @@
+qbraid
+qbraid-qir
+autoqasm
+amazon-braket-sdk
+cirq-core
+matplotlib
