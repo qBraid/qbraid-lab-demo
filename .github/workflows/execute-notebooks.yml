@@ -18,7 +18,8 @@ jobs:
           - qBraid-SDK
           - qBraid-QIR
           - qBraid-Algorithms
-          - qBraid-Runtime
+          # qBraid-Runtime : requires creds which costs money to run
+          # Provider-Jobs : requires creds which costs money to run
     env:
       QBRAID_API_KEY: ${{ secrets.QBRAID_API_KEY }}
     steps:
