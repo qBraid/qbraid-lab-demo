@@ -1,0 +1,111 @@
+name: Execute Notebooks
+
+on:
+  pull_request:
+    branches: ['main']
+    types: [opened, reopened, ready_for_review, synchronize]
+  workflow_dispatch:
+
+jobs:
+  execute:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        directory:
+          - PyQASM-Examples
+          - qBraid-SDK
+          - qBraid-QIR
+          - qBraid-Algorithms
+          # qBraid-Runtime : requires creds 
+          # Provider-Jobs : requires creds 
+    env:
+      QBRAID_API_KEY: ${{ secrets.QBRAID_API_KEY }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Create virtual environment
+      run: |
+        python -m venv .venv
+        echo "$PWD/.venv/bin" >> $GITHUB_PATH
+
+    - name: Install dependencies
+      run: |
+        .venv/bin/pip install --upgrade pip
+        .venv/bin/pip install jupyter nbconvert ipykernel
+        .venv/bin/python -m ipykernel install --user --name notebook-env
+        if [ -f "${{ matrix.directory }}/requirements.txt" ]; then
+          .venv/bin/pip install -r "${{ matrix.directory }}/requirements.txt"
+        fi
+
+    - name: Execute notebooks
+      id: execute
+      run: |
+        passed=0
+        failed=0
+        skipped=0
+        summary=""
+
+        for nb in $(find "${{ matrix.directory }}" -name '*.ipynb' | sort); do
+          name=$(basename "$nb")
+
+          # Skip notebooks with SENTINEL comments (require external credentials)
+          if grep -q "SENTINEL" "$nb"; then
+            summary="${summary}| ${name} | :white_circle: SKIPPED (requires credentials) |\n"
+            skipped=$((skipped + 1))
+            continue
+          fi
+
+          # Skip notebooks marked with SKIP_CI (e.g. require GPU/CUDA runtime)
+          if grep -q "SKIP_CI" "$nb"; then
+            summary="${summary}| ${name} | :white_circle: SKIPPED (SKIP_CI) |\n"
+            skipped=$((skipped + 1))
+            continue
+          fi
+
+          echo "::group::Executing $nb"
+          if .venv/bin/jupyter nbconvert --to notebook --execute \
+            --ExecutePreprocessor.kernel_name=notebook-env \
+            --ExecutePreprocessor.timeout=300 \
+            "$nb" --output "/tmp/test_${name}" 2>&1; then
+            summary="${summary}| ${name} | :white_check_mark: PASSED |\n"
+            passed=$((passed + 1))
+          else
+            summary="${summary}| ${name} | :x: FAILED |\n"
+            failed=$((failed + 1))
+          fi
+          echo "::endgroup::"
+        done
+
+        echo "passed=$passed" >> $GITHUB_OUTPUT
+        echo "failed=$failed" >> $GITHUB_OUTPUT
+        echo "skipped=$skipped" >> $GITHUB_OUTPUT
+
+        {
+          echo "table<<EOF"
+          echo -e "$summary"
+          echo "EOF"
+        } >> $GITHUB_OUTPUT
+
+        if [ "$failed" -gt 0 ]; then
+          exit 1
+        fi
+
+    - name: Post summary
+      if: always()
+      run: |
+        {
+          echo "## ${{ matrix.directory }} — Notebook Execution Results"
+          echo ""
+          echo "| Notebook | Result |"
+          echo "|----------|--------|"
+          echo -e "${{ steps.execute.outputs.table }}"
+          echo ""
+          echo "**Passed:** ${{ steps.execute.outputs.passed }} | **Failed:** ${{ steps.execute.outputs.failed }} | **Skipped:** ${{ steps.execute.outputs.skipped }}"
+        } >> $GITHUB_STEP_SUMMARY

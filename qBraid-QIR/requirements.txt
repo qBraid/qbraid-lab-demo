@@ -1,0 +1,9 @@
+qbraid
+qbraid-qir
+pyqir
+autoqasm
+amazon-braket-sdk
+cirq-core
+bloqade>=0.33
+pyqrack-cpu<2
+matplotlib
