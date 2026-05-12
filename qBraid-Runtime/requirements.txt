@@ -1,1 +1,2 @@
 qbraid[qiskit,cirq,braket,bloqade,azure,pulser,visualization]
+qiskit-aer

@@ -1,0 +1,93 @@
+name: Check Notebook License Footers
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check-license:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Check license footers
+      run: |
+        python << 'SCRIPT'
+        import json
+        import os
+        import sys
+
+        EXPECTED_FOOTER = (
+            '<div class="alert alert-block alert-info">\n'
+            "<b>Copyright Notice:</b> \n"
+            "    All rights reserved \u00a9 [2026] qBraid. This notebook is part of the qBraid-Lab-Demo repository.\n"
+            "The qBraid-Lab-Demo is licensed under the Apache License, Version 2.0.\n"
+            "You may obtain a copy of the License at <https://www.apache.org/licenses/LICENSE-2.0>.\n"
+            'Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n'
+            "</div>"
+        )
+
+        EXCLUDE_DIRS = {".venv", "node_modules", ".git"}
+
+        def find_notebooks(root):
+            notebooks = []
+            for dirpath, dirnames, filenames in os.walk(root):
+                dirnames[:] = [d for d in dirnames if d not in EXCLUDE_DIRS]
+                for fname in filenames:
+                    if fname.endswith(".ipynb"):
+                        notebooks.append(os.path.join(dirpath, fname))
+            return sorted(notebooks)
+
+        def check_notebook(path):
+            with open(path, "r", encoding="utf-8") as f:
+                nb = json.load(f)
+
+            cells = nb.get("cells", [])
+            if not cells:
+                return False, "notebook has no cells"
+
+            last_cell = cells[-1]
+            if last_cell.get("cell_type") != "markdown":
+                return False, "last cell is not a markdown cell"
+
+            source = "".join(last_cell.get("source", []))
+
+            if source != EXPECTED_FOOTER:
+                return False, "last cell does not match the exact expected license footer"
+
+            return True, "license footer present"
+
+        def main():
+            root = os.getcwd()
+            notebooks = find_notebooks(root)
+
+            if not notebooks:
+                print("No .ipynb files found.")
+                sys.exit(0)
+
+            failed = []
+            for nb_path in notebooks:
+                rel = os.path.relpath(nb_path, root)
+                passed, reason = check_notebook(nb_path)
+                if passed:
+                    print(f"PASS: {rel} - {reason}")
+                else:
+                    print(f"FAIL: {rel} - {reason}")
+                    failed.append(rel)
+
+            print()
+            print(f"Checked {len(notebooks)} notebook(s): {len(notebooks) - len(failed)} passed, {len(failed)} failed.")
+
+            if failed:
+                print()
+                print("The following notebooks are missing the required Apache 2.0 license footer as their last cell:")
+                for f in failed:
+                    print(f"  - {f}")
+                sys.exit(1)
+
+        if __name__ == "__main__":
+            main()
+        SCRIPT

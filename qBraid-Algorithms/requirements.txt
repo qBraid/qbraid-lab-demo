@@ -1,2 +1,5 @@
-qbraid[visualization]
+qbraid[qiskit,visualization]
 qbraid-algorithms
+qiskit-aer
+qsimcirq
+cirq
