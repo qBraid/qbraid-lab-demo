@@ -1,8 +1,10 @@
 name: Check Notebook License Footers
 
 on:
-  push:
   pull_request:
+    branches: ['main']
+    types: [opened, reopened, ready_for_review, synchronize]
+  workflow_dispatch:
 
 jobs:
   check-license:
