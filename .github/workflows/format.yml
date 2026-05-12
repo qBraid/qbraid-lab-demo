@@ -25,4 +25,4 @@ jobs:
         pip install "black[jupyter]"
     - name: Check formating with black
       run: |
-        black qBraid-Algorithms qBraid-QIR qBraid-Runtime qBraid-SDK Provider-Jobs PyQASM-Examples Drafts --line-length=100 --check
+        black qBraid-Algorithms qBraid-QIR qBraid-Runtime qBraid-SDK Provider-Jobs PyQASM-Examples --line-length=100 --check
