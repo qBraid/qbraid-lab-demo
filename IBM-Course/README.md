@@ -4,12 +4,16 @@ qBraid Lab versions of the four lessons in IBM Quantum Learning's
 [*Use a Quantum Computer Today*](https://quantum.cloud.ibm.com/learning/courses/use-a-qc-today)
 course by Olivia Lanes.
 
+Ordering follows IBM Quantum Learning's official lesson sequence — start
+with the hands-on Hello-World lesson, build up the physics in lessons 2
+and 3, and round it off with the conceptual context in lesson 4.
+
 | # | Notebook | Video |
 |---|---|---|
-| 1 | [Quantum Computing Context](01-quantum-computing-context.ipynb) | [youtu.be/y_1SiE1tlTk](https://youtu.be/y_1SiE1tlTk) |
+| 1 | [Build and Run Your First Quantum Program](01-build-and-run-your-first-quantum-program.ipynb) | [youtu.be/vSFv_i_FAXg](https://youtu.be/vSFv_i_FAXg) |
 | 2 | [Quantum Mechanics Basics](02-quantum-mechanics-basics.ipynb) | [youtu.be/lKFElrwEZrU](https://youtu.be/lKFElrwEZrU) |
 | 3 | [Your First Quantum Experiment](03-your-first-quantum-experiment.ipynb) | [youtu.be/kniiVC538nY](https://youtu.be/kniiVC538nY) |
-| 4 | [Build and Run Your First Quantum Program](04-build-and-run-your-first-quantum-program.ipynb) | [youtu.be/vSFv_i_FAXg](https://youtu.be/vSFv_i_FAXg) |
+| 4 | [Quantum Computing Context](04-quantum-computing-context.ipynb) | [youtu.be/y_1SiE1tlTk](https://youtu.be/y_1SiE1tlTk) |
 
 ## What's different from the upstream IBM notebooks
 
