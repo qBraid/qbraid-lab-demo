@@ -2,7 +2,7 @@ name: Check Notebook License Footers
 
 on:
   pull_request:
-    branches: ['main']
+    branches: ['main', 'staging']
     types: [opened, reopened, ready_for_review, synchronize]
   workflow_dispatch:
 

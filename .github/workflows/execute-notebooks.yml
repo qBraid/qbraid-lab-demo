@@ -2,7 +2,7 @@ name: Execute Notebooks
 
 on:
   pull_request:
-    branches: ['main']
+    branches: ['main', 'staging']
     types: [opened, reopened, ready_for_review, synchronize]
   workflow_dispatch:
 
@@ -66,6 +66,14 @@ jobs:
           # Skip notebooks marked with SKIP_CI (e.g. require GPU/CUDA runtime)
           if grep -q "SKIP_CI" "$nb"; then
             summary="${summary}| ${name} | :white_circle: SKIPPED (SKIP_CI) |\n"
+            skipped=$((skipped + 1))
+            continue
+          fi
+
+          # Skip notebooks that authenticate with the qBraid API when no key is
+          # available (secrets are not exposed to pull_request runs from forks)
+          if [ -z "$QBRAID_API_KEY" ] && grep -qE "QbraidProvider|QbraidClient" "$nb"; then
+            summary="${summary}| ${name} | :white_circle: SKIPPED (no API key on fork PRs) |\n"
             skipped=$((skipped + 1))
             continue
           fi
