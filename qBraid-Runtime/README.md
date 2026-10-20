@@ -6,6 +6,7 @@ Notebooks demonstrating [qBraid Runtime](https://docs.qbraid.com/runtime) featur
 
 | Notebook | Description |
 |----------|-------------|
+| [aqt_ibex_q1_quickstart.ipynb](aqt_ibex_q1_quickstart.ipynb) | AQT's IBEX Q1 trapped-ion computer: availability windows, job cost, a Bell state, and a 12-qubit GHZ state |
 | [aws_sim_qiskit_bernstein_vazirani.ipynb](aws_sim_qiskit_bernstein_vazirani.ipynb) | Bernstein-Vazirani algorithm on AWS simulators using Qiskit circuits |
 | [qbraid_pulser_pasqal.ipynb](qbraid_pulser_pasqal.ipynb) | Analog quantum computing with Pulser on Pasqal devices |
 | [qbraid_runtime_bloqade_aquila.ipynb](qbraid_runtime_bloqade_aquila.ipynb) | Bloqade programs on QuEra Aquila via qBraid Runtime |
