@@ -1,9 +1,9 @@
 
 # qBraid Demos and Tutorials
 
-Welcome to the qBraid Demos Repository! This repository contains a collection of Jupyter Notebooks showcasing how to use **qBraid's open-source SDKs** for quantum computing. It includes hands-on examples that demonstrate the integration of various tools with **qBraid-Lab**, making it easier to run quantum computing experiments seamlessly in the cloud.
+Welcome to the qBraid Demos Repository! This repository contains a collection of Jupyter Notebooks showcasing how to use **qBraid's open-source SDKs** for quantum computing. It includes hands-on examples that demonstrate the integration of various tools with **qBraid**, making it easier to run quantum computing experiments seamlessly in the cloud.
 
-**Requires:** qBraid SDK >= 0.12.0
+**Requires:** qBraid SDK >= 0.13.0
 
 ## Contents
 
@@ -21,8 +21,7 @@ This repository features tutorials and examples for the following:
 For more information on qBraid and its tools, check out:
 
 - **qBraid Platform Documentation**: Comprehensive user guides and resources at [docs.qbraid.com](https://docs.qbraid.com/).
-- **qBraid Software API Reference**: Detailed API documentation for the qBraid-SDK at [sdk.qbraid.com](https://sdk.qbraid.com/qBraid/api/qbraid.html).
-- **qBraid GitHub Community**: Join the discussion and contribute at [GitHub Community Page](https://github.com/qBraid/community).
+- **qBraid Software API Reference**: Detailed API reference for qBraid Python packages at [sdk.qbraid.com](https://sdk.qbraid.com/).
 
 ## Contribution
 
