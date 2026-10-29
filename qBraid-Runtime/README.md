@@ -12,5 +12,6 @@ Notebooks demonstrating [qBraid Runtime](https://docs.qbraid.com/runtime) featur
 | [qbraid_pulser_pasqal.ipynb](qbraid_pulser_pasqal.ipynb) | Analog quantum computing with Pulser on Pasqal devices |
 | [qbraid_runtime_bloqade_aquila.ipynb](qbraid_runtime_bloqade_aquila.ipynb) | Bloqade programs on QuEra Aquila via qBraid Runtime |
 | [qbraid_runtime_qbraid_provider_aws_devices.ipynb](qbraid_runtime_qbraid_provider_aws_devices.ipynb) | Accessing AWS devices through the QbraidProvider |
+| [qudora_noise_model_quickstart.ipynb](qudora_noise_model_quickstart.ipynb) | QUDORA's trapped-ion emulators: the default noise model, its four settings, readout and T2 sweeps, and batch jobs |
 | [quobly_alloy_forge_quickstart.ipynb](quobly_alloy_forge_quickstart.ipynb) | Quobly's silicon spin-qubit emulator: noiseless vs. the Pioneer hardware noise model |
 | [quobly_ghz_noise_benchmark.ipynb](quobly_ghz_noise_benchmark.ipynb) | Growing a GHZ chain along Quobly's linear coupling map to measure noise accumulation |
