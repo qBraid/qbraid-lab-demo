@@ -6,6 +6,7 @@ Notebooks demonstrating [qBraid Runtime](https://docs.qbraid.com/runtime) featur
 
 | Notebook | Description |
 |----------|-------------|
+| [aqt_ibex_q1_quickstart.ipynb](aqt_ibex_q1_quickstart.ipynb) | AQT's IBEX Q1 trapped-ion computer: availability windows, job cost, a Bell state, and a 12-qubit GHZ state |
 | [aws_sim_qiskit_bernstein_vazirani.ipynb](aws_sim_qiskit_bernstein_vazirani.ipynb) | Bernstein-Vazirani algorithm on AWS simulators using Qiskit circuits |
 | [qbraid_gpu_sv_quickstart.ipynb](qbraid_gpu_sv_quickstart.ipynb) | qBraid's GPU state vector simulator: exact runs up to 35 qubits, precision, `seed`, and wide circuits |
 | [qbraid_gpu_tn_quickstart.ipynb](qbraid_gpu_tn_quickstart.ipynb) | qBraid's GPU tensor network simulator: 100-qubit MPS runs, truncation and `maxBondDim`, and exact contraction |
